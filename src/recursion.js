@@ -7,31 +7,82 @@
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
+  if (n < 0) {
+    return null;
+  }
+  if (n === 0) {
+    return 1;
+  }
+  return n * factorial(n-1);
 };
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
+
 var sum = function(array) {
-};
+  var newArray = array.slice(0);
+  if (array.length === 0) {
+    return 0;
+  }
+  return newArray.pop() + sum(newArray);
+}
+
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
+  // need to reach into the deeper arrays to pop their individual values.
+  // use Array.isArray to force us deeper.
+  // if the final element of the array is not an array
 var arraySum = function(array) {
+  var newArray = array.slice(0);
+  // base case, if array length
+  if (array.length === 0) {
+    return 0;
+  }
+  // if the last element isn't itself an array
+  if (!Array.isArray(newArray[newArray.length -1])) {
+    // pop off the end of the array to the return value and continue the recursion with the rest of the array
+    return newArray.pop() + arraySum(newArray);
+  }
+  // otherwise pop the last element to the recursed function and feed the rest of the array back in to a separate recursed function.
+  return arraySum(newArray.pop()) +  arraySum(newArray);
 };
+
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+  n = Math.abs(n);
+  if (n < 2) {
+    return (n === 0);
+  }
+  return isEven(n - 2);
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  // start at n-1 and sum backwards?
+  if (n === 0) {
+    return 0;
+  }
+  if (n === 1 || n === -1) {
+    return 0;
+  }
+  if (n < 0) {
+    return n + 1 + sumBelow(n + 1);
+  }
+  return n - 1 + sumBelow(n - 1);
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+  var arr = [x + 1];
+  if (x < y - 1) {
+    return arr.push(range(x + 1, y));
+  }
+  return;
 };
 
 // 7. Compute the exponent of a number.
