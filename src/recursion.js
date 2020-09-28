@@ -62,27 +62,38 @@ var isEven = function(n) {
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
-  // start at n-1 and sum backwards?
+  // base case, if n is zero return zero
   if (n === 0) {
     return 0;
   }
-  if (n === 1 || n === -1) {
-    return 0;
-  }
+  // if n is a negative number work upward
   if (n < 0) {
     return n + 1 + sumBelow(n + 1);
   }
+  // continually add until base condition is reached
   return n - 1 + sumBelow(n - 1);
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
-  var arr = [x + 1];
-  if (x < y - 1) {
-    return arr.push(range(x + 1, y));
+  // if x is less than y, push to integers and call on next number
+  if (x < y - 2) {
+    var integers = [x + 1];
+    return integers.concat(range(x + 1, y));
+  } else if (x === y - 2) {
+    return x + 1;
+    // reverse for x greater than y
+  } else if (x > y + 2) {
+    var integers = [x - 1];
+    return integers.concat(range(x - 1, y));
+  } else if (x === y + 2) {
+    return x - 1;
+  } else {
+    return [];
   }
-  return;
+
+
 };
 
 // 7. Compute the exponent of a number.
@@ -91,34 +102,295 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+  if (exp > 0) {
+    return base * exponent(base, exp - 1)
+  } else if (exp < 0) {
+    exp = exp - (exp * 2)
+    return 1 / exponent(base, exp)
+  } else {
+    return 1;
+  }
 };
+
+
+
+
+
+
+
+
+// Inputs: a single number
+// Output: a boolean indicating whether the input is a power of two
+// Constraints: must use recursion
+// Edge Cases: nkec
+
+
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+  // base case - check to see if the input is one or two
+  if (n === 2 || n === 1) {
+    // if it is, return true.
+    return true;
+  }
+  // check to see if the input is greater than two
+  if (n > 2) {
+    // if it is more, recurse the function called on the number divided by 2
+    return powerOfTwo(n/2);
+  } else {
+    // if less, return false
+    return false;
+  }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+  if (string.length === 0) {
+    return '';
+  }
+  var lastLetter = string[string.length - 1];
+  var shorterString = string.slice(0, string.length - 1);
+  return lastLetter + (reverse(shorterString));
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+  string = string.split(' ');
+  string = string.join('');
+  string = string.toLowerCase();
+  if (reverse(string) === string) {
+    return true;
+  } else {
+    return false;
+  }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 11. Write a function that returns the remainder of x divided by y without using the
 // modulo (%) operator.
 // modulo(5,2) // 1
 // modulo(17,5) // 2
 // modulo(22,6) // 4
+// base case y is greater than x
 var modulo = function(x, y) {
+  if (x === 0 && y === 0) {
+    return NaN;
+  }
+  if (y > x) {
+    return x;
+  } else if ( y === x) {
+    return 0;
+  }
+  return modulo(x - y, y);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
 var multiply = function(x, y) {
+  if (y > 0) {
+    return multiply(x + x, y - 1);
+  } else if (y < 0) {
+    return multiply(-x + x, y + 1);
+  }
 };
 
 // 13. Write a function that divides two numbers without using the / operator or
@@ -175,24 +447,128 @@ var countOccurrence = function(array, value) {
 var rMap = function(array, callback) {
 };
 
+
+
+
+
+
+
+
 // 22. Write a function that counts the number of times a key occurs in an object.
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+  var sum = 0;
+  for (var prop in obj) {
+    // console.log(prop);
+
+    if (prop === key) {
+      sum ++;
+      // console.log(sum);
+    }
+    // if there is a deeper object search it (right now we are getting stuck in the deeper obj because we are returning and not re-entering the other obj)
+    if (typeof(obj[prop]) === 'object') {
+      sum += countKeysInObj(obj[prop], key);
+    }
+  }
+  return sum;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 23. Write a function that counts the number of times a value occurs in an object.
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+  var sum = 0;
+  for (var prop in obj) {
+    // console.log(prop);
+
+    if (obj[prop] === value) {
+      sum ++;
+      // console.log(sum);
+    }
+    // if there is a deeper object search it (right now we are getting stuck in the deeper obj because we are returning and not re-entering the other obj)
+    if (typeof(obj[prop]) === 'object') {
+      sum += countValuesInObj(obj[prop], value);
+    }
+  }
+  return sum;
 };
+
+
+
+
+
+
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
+  for (var prop in obj) {
+    // replace old keys with new keys at every point
+    if (prop === oldKey) {
+      obj[newKey] = obj[oldKey];
+      delete obj[oldKey];
+    }
+    // if there is a deeper object search it (right now we are getting stuck in the deeper obj because we are returning and not re-entering the other obj)
+    if (typeof(obj[prop]) === 'object') {
+      replaceKeysInObj(obj[prop], oldKey, newKey);
+    }
+  }
+  return obj;
 };
+
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
 // number is the sum of the previous two.
