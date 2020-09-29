@@ -114,17 +114,10 @@ var exponent = function(base, exp) {
 
 
 
-
-
-
-
-
 // Inputs: a single number
 // Output: a boolean indicating whether the input is a power of two
 // Constraints: must use recursion
 // Edge Cases: nkec
-
-
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
@@ -147,57 +140,6 @@ var powerOfTwo = function(n) {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
   if (string.length === 0) {
@@ -214,94 +156,75 @@ var reverse = function(string) {
 
 
 
+// Inputs: a string potentially containing spaces and capital letters to be ignored
+// Output: a boolean indicating whether the string is a palindrome regardless of spaces and caps
+// Constraints: must use recursion, cannot use native reverse method.
+// Edge Cases: Spaces a capital letters must be ignored
 
 
+// Test - palindrome("tot"); palindrome("Ha p pAh"); palindrome("asd");
 
+// Big picture strategies:
+/*
+We need to be repeatedly concattenating the string in reverse order. In order to achieve this, we can recursively concat the popped letter to a new string until there are no longer any letters left to pop. Once there are no letters left, we move on to check the new string.
 
+We want to return the result of popping the last letter to a new string
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Check the indexes at opposite ends against one another and traverse across the string
+*/
 
 
 // 10. Write a function that determines if a string is a palindrome.
+// var palindrome = function(string) {
+//   // to get rid of the spaces, we split the string into an array on the spaces
+//   string = string.split(' ');
+//   // we then join the string eliminating spaces
+//   string = string.join('');
+//   // to eliminate upper case problems, we lower case the string
+//   string = string.toLowerCase();
+//   // we create a new string variable to recieve the reversed string
+//   // duplicate the input string to use for the reversed string
+//   // if the duplicated string length is zero,
+//     // we concat an empty string
+//   // otherwise, we recursively pop the last letter
+//   // then we check the new string against the input string to see if they are the same and return boolean result.
+//   var storedString = string;
+//   var lastLetter = string[string.length - 1];
+//   var shorterString = string.slice(0, string.length - 1);
+//   if (string.length === 0) {
+//     return '';
+//   }
+//   return lastLetter + (palindrome(shorterString));
+
+// };
+
+
+
 var palindrome = function(string) {
+  // to get rid of the spaces, we split the string into an array on the spaces
   string = string.split(' ');
+  // we then join the string eliminating spaces
   string = string.join('');
+  // to eliminate upper case problems, we lower case the string
   string = string.toLowerCase();
-  if (reverse(string) === string) {
-    return true;
-  } else {
-    return false;
+  // if the string isn't empty
+  if (string.length > 0) {
+    // compare the first and last letters of the string. If they match
+    if (string[0] === string[string.length - 1]) {
+      // create a shortened version of the string
+      var shorterString = string.slice(1, string.length - 1);
+      // recursively check the shortened string
+      return palindrome(shorterString);
+    // if the first and last letter don't match
+    } else {
+      // return false
+      return false;
+    }
+    // if the string is empty, we have reached the end of the string, so
   }
+  return true;
+    // return true
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -332,14 +255,20 @@ var palindrome = function(string) {
 // modulo(22,6) // 4
 // base case y is greater than x
 var modulo = function(x, y) {
+  // edge case, if the inputs are 0, we have NAN
   if (x === 0 && y === 0) {
     return NaN;
   }
+
+  // base case - if y is greater than x, we now have the remainder.
   if (y > x) {
     return x;
+  // or, if y is equal to x, we now have the remainder
   } else if ( y === x) {
     return 0;
   }
+
+  // until we reach the base case, we keep calling modulo on x - y, esentially dividing it through recursion.
   return modulo(x - y, y);
 };
 
